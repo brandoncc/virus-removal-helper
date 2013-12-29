@@ -1,10 +1,10 @@
 # encoding: utf-8
 
 require 'curses'
-require_relative 'constants'
-require_relative 'commands_window'
-require_relative 'menu_bar'
-require_relative 'items_window'
+require_relative 'classes/constants'
+require_relative 'classes/commands_window'
+require_relative 'classes/menu_bar'
+require_relative 'classes/items_window'
 
 Curses.curs_set(0)
 Curses.noecho # do not show typed chars
@@ -30,7 +30,7 @@ until (key = items_window.getch) == 'q'
     items_window.change_selection(:down)
   when "\r".ord
     items_window.select_item
-  when "\e".ord
+  when "\t".ord
     items_window.step_up_one_menu_level
   end
 end
