@@ -19,13 +19,23 @@ class ItemsWindow
   def build_items
     @items = []
 
-    ['Avast Antivirus', 'AVG Free Edition', 'AVG Internet Security Edition', 'Avira Antivir'].each do |i|
-      @items << Item.new(i, 'Antivirus Applications')
+    [
+        ['Avast Antivirus', 'http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe', :direct],
+        ['AVG Free Edition', 'http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe', :direct],
+        ['AVG Internet Security Edition', 'http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe', :direct],
+        ['Avira Antivir', 'http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe', :direct]
+    ].each do |i|
+      @items << Item.new(i[0], 'Antivirus Applications', i[1], i[2])
     end
 
-    ['McAfee Removal Tool', 'McAfee Removal Tool v2', 'McAfee Virtual Technician', 'Norton Removal Tool',
-     'Verizon Internet Security Suite Removal Tool'].each do |i|
-      @items << Item.new(i, 'Antivirus Removers')
+    [
+        ['McAfee Removal Tool', 'http://download.mcafee.com/products/licensed/cust_support_patches/MCPR.exe', :direct],
+        ['McAfee Removal Tool v2', 'http://download.mcafee.com/products/licensed/cust_support_patches/MCPR.exe', :direct],
+        ['McAfee Virtual Technician', 'http://download.mcafee.com/products/licensed/cust_support_patches/MCPR.exe', :direct],
+        ['Norton Removal Tool', 'http://download.mcafee.com/products/licensed/cust_support_patches/MCPR.exe', :direct],
+        ['Verizon Internet Security Suite Removal Tool', 'http://download.mcafee.com/products/licensed/cust_support_patches/MCPR.exe', :direct]
+    ].each do |i|
+      @items << Item.new(i[0], 'Antivirus Removers', i[1], i[2])
     end
 
     ['ATF-Cleaner', 'Blastemp', 'CleanUp!'].each do |i|
@@ -55,7 +65,7 @@ class ItemsWindow
     else
       @items.each do |i|
         if i.category == @current_category
-          matching_items << "#{i.title} (#{i.executable_name})" unless matching_items.include?(i.title)
+          matching_items << "#{i.title}" unless matching_items.include?(i.title)
         end
       end
     end
@@ -110,10 +120,19 @@ class ItemsWindow
     build_display
   end
 
+  def get_selected_item
+    @items.select{ |i| self.items(false)[@selected_line + @top_line_scrolled_to] == i.title }.first
+  end
+
+
   def select_item
-    @current_category = self.items(false)[@selected_line + @top_line_scrolled_to]
-    @selected_line    = 0
-    build_display
+    if @current_category == :main
+      @current_category = self.items(false)[@selected_line + @top_line_scrolled_to]
+      @selected_line    = 0
+      build_display
+    else
+      get_selected_item.download_file(self)
+    end
   end
 
   def step_up_one_menu_level
