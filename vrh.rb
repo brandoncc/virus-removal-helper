@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'curses'
+require 'fileutils'
 require_relative 'classes/constants'
 require_relative 'classes/menu_bar'
 require_relative 'classes/commands_window'
