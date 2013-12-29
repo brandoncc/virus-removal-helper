@@ -12,7 +12,7 @@ class CommandsWindow
   end
 
   def build_display
-    commands = ['[enter] - Select / Download and Execute', '[e] - Execute only',
+    commands = ['[enter] - Select / Download and execute', '[e] - Execute only',
                 '[tab] - Up one level', '[c] - Cleanup', '[t] - Fix time format', '[q] - Quit']
 
     command_string ||= ''
