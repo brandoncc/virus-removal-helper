@@ -12,7 +12,7 @@ class CommandsWindow
 
   def build_display
     commands = ['[enter] - Select / Download and Execute', '[e] - Execute only',
-                '[esc-esc] - Up one level', '[c] - Cleanup', '[t] - Fix time format', '[q] - Quit']
+                '[tab] - Up one level', '[c] - Cleanup', '[t] - Fix time format', '[q] - Quit']
 
     command_string ||= ''
     commands.each do |c|
