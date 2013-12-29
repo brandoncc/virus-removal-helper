@@ -14,28 +14,59 @@ class ItemsWindow
     @window.box('|', '-')
     @window.keypad(true)
     @selected_line        = 0
-    @items                = {
-        'Antivirus Applications' => ['Avast Antivirus', 'AVG Free Edition', 'AVG Internet Security Edition',
-                                     'Avira Antivir'],
-        'Antivirus Removers'     => ['McAfee Removal Tool', 'McAfee Removal Tool v2', 'McAfee Virtual Technician',
-                                     'Norton Removal Tool', 'Verizon Internet Security Suite Removal Tool'],
-        'Cleanup Tools'          => ['ATF-Cleaner', 'Blastemp', 'CleanUp!'],
-        'Spyware/Virus Scanners' => ['AIMFix', 'ComboFix', 'DoctorWeb CureIt!', 'GMER', 'HijackThis',
-                                     'MalwareBytes Malware Scan', 'MBR', 'SDFix', 'Spybot Search & Destroy',
-                                     'SUPERAntiSpyware'],
-        'System Tools'           => ['Dial-a-Fix', 'FileASSASSIN', 'Killbox', 'Unlocker']
-    }
     @current_category     = :main
     @top_line_scrolled_to = 0
+    build_items
   end
 
-  def build_items(cropped = true)
-    if cropped
-      @current_category == :main ?
-          @items.keys.slice(@top_line_scrolled_to, ITEM_LINES) :
-          @items[@current_category].slice(@top_line_scrolled_to, ITEM_LINES)
+  def build_items
+    @items = []
+
+    ['Avast Antivirus', 'AVG Free Edition', 'AVG Internet Security Edition', 'Avira Antivir'].each do |i|
+      @items << Item.new(i, 'Antivirus Applications')
+    end
+
+    ['McAfee Removal Tool', 'McAfee Removal Tool v2', 'McAfee Virtual Technician', 'Norton Removal Tool',
+     'Verizon Internet Security Suite Removal Tool'].each do |i|
+      @items << Item.new(i, 'Antivirus Removers')
+    end
+
+    ['ATF-Cleaner', 'Blastemp', 'CleanUp!'].each do |i|
+      @items << Item.new(i, 'Cleanup Tools')
+    end
+
+    ['AIMFix', 'ComboFix', 'DoctorWeb CureIt!', 'GMER', 'HijackThis', 'MalwareBytes Malware Scan', 'MBR', 'SDFix',
+     'Spybot Search & Destroy', 'SUPERAntiSpyware'].each do |i|
+      @items << Item.new(i, 'Spyware/Virus Scanners')
+    end
+
+    ['Dial-a-Fix', 'FileASSASSIN', 'Killbox', 'Unlocker'].each do |i|
+      @items << Item.new(i, 'System Tools')
+    end
+  end
+
+  def items(cropped = true)
+    matching_items = []
+
+    case @current_category
+    when :main
+      @items.each do |i|
+        root_category = i.category.split('|').first
+
+        matching_items << root_category unless matching_items.include?(root_category)
+      end
     else
-      @current_category == :main ? @items.keys : @items[@current_category]
+      @items.each do |i|
+        if i.category == @current_category
+          matching_items << "#{i.title} (#{i.executable_name})" unless matching_items.include?(i.title)
+        end
+      end
+    end
+
+    if cropped
+      matching_items.slice(@top_line_scrolled_to, ITEM_LINES)
+    else
+      matching_items
     end
   end
 
@@ -43,7 +74,7 @@ class ItemsWindow
     @window.clear
     @window.box('|', '-')
 
-    build_items.each_with_index do |item, index|
+    self.items.each_with_index do |item, index|
       @window.setpos(2 + index, 3)
 
       if index == @selected_line
@@ -72,7 +103,7 @@ class ItemsWindow
         @selected_line        -= 1 unless @selected_line == 0
       end
     when :down
-      unless (@top_line_scrolled_to + @selected_line + 1) == build_items(false).count
+      unless (@top_line_scrolled_to + @selected_line + 1) == self.items(false).count
         @top_line_scrolled_to += 1 if @selected_line == ITEM_LINES - 1
         @selected_line        += 1 unless @selected_line == ITEM_LINES - 1
       end
@@ -83,7 +114,7 @@ class ItemsWindow
   end
 
   def select_item
-    @current_category = build_items(false)[@selected_line + @top_line_scrolled_to]
+    @current_category = self.items(false)[@selected_line + @top_line_scrolled_to]
     @selected_line    = 0
     build_display
   end

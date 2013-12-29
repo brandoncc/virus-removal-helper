@@ -5,6 +5,7 @@ require_relative 'classes/constants'
 require_relative 'classes/commands_window'
 require_relative 'classes/menu_bar'
 require_relative 'classes/items_window'
+require_relative 'classes/item'
 
 Curses.curs_set(0)
 Curses.noecho # do not show typed chars
