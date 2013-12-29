@@ -1,15 +1,14 @@
 # encoding: utf-8
 require 'net/http'
 require 'uri'
-require 'pry'
 
 class DownloadWindow
   attr_accessor :window, :progress_bar, :size, :item, :start_time
 
-  WINDOW_HEIGHT = 6
+  WINDOW_HEIGHT = 9
   WINDOW_WIDTH  = 70
 
-  PROGRESSBAR_LOCATION_TOP  = WINDOW_HEIGHT - 2
+  PROGRESSBAR_LOCATION_TOP  = WINDOW_HEIGHT - 5
   PROGRESSBAR_LOCATION_LEFT = 3
   PROGRESSBAR_SIZE_HEIGHT   = 1
   PROGRESSBAR_SIZE_WIDTH    = WINDOW_WIDTH - 6
@@ -22,6 +21,7 @@ class DownloadWindow
     @window.nodelay = 1
     @item   = item
     @parent = parent_window
+    @window.color_set(3)
   end
 
   def download_file(url)
@@ -50,8 +50,8 @@ class DownloadWindow
           download = http.get(URI.escape(url_path)) do |str|
             f.write str
             @counter += str.length
-            setpos(PROGRESSBAR_LOCATION_TOP, PROGRESSBAR_LOCATION_LEFT)
-            @window << (self.progress_bar.show(@counter)).center(PROGRESSBAR_SIZE_WIDTH)
+            setpos(PROGRESSBAR_LOCATION_TOP, 1)
+            @window << (self.progress_bar.show(@counter)).center(WINDOW_WIDTH - 2)
             @window.refresh
 
             #begin
@@ -83,6 +83,15 @@ class DownloadWindow
     @window.setpos(2, 1)
     @window << '-' * (WINDOW_WIDTH - 2)
 
+    (3..WINDOW_HEIGHT-4).each do |l|
+      @window.setpos(l, 1)
+      @window << ' ' * (WINDOW_WIDTH - 2)
+    end
+
+    @window.setpos(WINDOW_HEIGHT - 3, 1)
+    @window << '-' * (WINDOW_WIDTH - 2)
+    @window.setpos(WINDOW_HEIGHT - 2, 1)
+    @window << '[c] - Cancel download'.center(WINDOW_WIDTH - 2)
     @window.refresh
   end
 

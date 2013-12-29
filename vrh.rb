@@ -19,6 +19,7 @@ Curses.init_screen
 Curses.start_color
 Curses.init_pair(1, Curses::COLOR_GREEN, Curses::COLOR_BLACK)
 Curses.init_pair(2, Curses::COLOR_BLACK, Curses::COLOR_GREEN)
+Curses.init_pair(3, Curses::COLOR_BLACK, Curses::COLOR_WHITE)
 
 menu_bar = MenuBar.new
 menu_bar.build_display
