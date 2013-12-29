@@ -8,6 +8,7 @@ class CommandsWindow
   def initialize
     @window = Curses::Window.new(WINDOW_HEIGHT, Constants::SCREEN_WIDTH, 20, 0)
     @window.box('|', '-')
+    @window.color_set(1)
   end
 
   def build_display

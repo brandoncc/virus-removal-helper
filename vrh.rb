@@ -14,6 +14,8 @@ Curses.raw # give us all other keys
 Curses.stdscr.nodelay = 1 # do not block -> we can use timeouts
 Curses.init_screen
 Curses.start_color
+Curses.init_pair(1, Curses::COLOR_GREEN, Curses::COLOR_BLACK)
+Curses.init_pair(2, Curses::COLOR_BLACK, Curses::COLOR_GREEN)
 
 menu_bar = MenuBar.new
 menu_bar.build_display

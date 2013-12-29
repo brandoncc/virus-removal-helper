@@ -7,10 +7,10 @@ class MenuBar
 
   def initialize
     @window = Curses::Window.new(WINDOW_HEIGHT, Constants::SCREEN_WIDTH, 0, 0)
+    @window.color_set(2)
   end
 
   def build_display
-    @window.attron(Curses::A_REVERSE)
     @window <<
         "Virus Removal Helper - Copyright 2008-#{Time.new.year} Brandon Conway".center(Constants::SCREEN_WIDTH)
     @window.refresh
