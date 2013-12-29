@@ -76,10 +76,10 @@ class ItemsWindow
 
       if index == @selected_line
         @window.standout
-        @window << item.slice(0, Constants::SCREEN_WIDTH - 4)
+        @window << item.slice(0, Constants::SCREEN_WIDTH - 6)
         @window.standend
       else
-        @window << item.slice(0, Constants::SCREEN_WIDTH - 4)
+        @window << item.slice(0, Constants::SCREEN_WIDTH - 6)
       end
     end
 
