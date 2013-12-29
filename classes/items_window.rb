@@ -8,9 +8,6 @@ class ItemsWindow
 
   def initialize
     @window = Curses::Window.new(WINDOW_HEIGHT, Constants::SCREEN_WIDTH, 1, 0)
-    @window.scrollok(1)
-    @window.idlok(1)
-    @window.setscrreg(30, 30)
     @window.box('|', '-')
     @window.keypad(true)
     @selected_line        = 0
