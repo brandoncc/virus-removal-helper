@@ -1,12 +1,11 @@
 class Item
   attr_accessor :executable_name, :category, :title, :download_url
 
-  def initialize(title, category, download_url = nil, download_type = :direct)
-    @title = title
+  def initialize(title, category, download_url = nil)
+    @title        = title
     self.category = category
     set_executable_name(title)
-    @download_url = download_url
-    @download_type = download_type
+    @download_url  = download_url
   end
 
   def category=(path)
