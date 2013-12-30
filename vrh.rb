@@ -2,6 +2,7 @@
 
 require 'curses'
 require 'fileutils'
+require 'mechanize'
 require_relative 'classes/constants'
 require_relative 'classes/menu_bar'
 require_relative 'classes/commands_window'

@@ -19,8 +19,8 @@ class DownloadWindow
                                  (Constants::SCREEN_WIDTH - WINDOW_WIDTH) / 2)
 
     @window.nodelay = 1
-    @item   = item
-    @parent = parent_window
+    @item           = item
+    @parent         = parent_window
     @window.color_set(3)
   end
 
@@ -35,33 +35,44 @@ class DownloadWindow
       FileUtils.makedirs(save_dir)
     end
 
-    local_file = save_dir + File::SEPARATOR + self.item.executable_name + '.' + strip_file_extension(url_path)
+    local_file = nil
 
     begin
+      response = nil
+      while response.nil? || response.code == '301' || response.code == '302'
+
+        response = Net::HTTP.start(url_base).request_head(URI.escape(url_path))
+
+        if response.code == '301' || response.code == '302'
+          url_base = response['location'].split('/')[2]
+          url_path = '/'+response['location'].split('/')[3..-1].join('/')
+        end
+      end
+
       Net::HTTP.start(url_base) do |http|
-        response = http.request_head(URI.escape(url_path))
+        if response.code == '200'
 
-        self.size       = response['content-length'].to_i
-        self.start_time = Time.now
+          self.size       = response['content-length'].to_i
+          self.start_time = Time.now
 
-        self.progress_bar = ProgressBar.new(response['content-length'].to_i, PROGRESSBAR_SIZE_WIDTH)
+          self.progress_bar = ProgressBar.new(response['content-length'].to_i, PROGRESSBAR_SIZE_WIDTH)
 
-        File.open(local_file, 'w') { |f|
-          download = http.get(URI.escape(url_path)) do |str|
-            f.write str
-            @counter += str.length
-            setpos(PROGRESSBAR_LOCATION_TOP, 1)
-            @window << (self.progress_bar.show(@counter)).center(WINDOW_WIDTH - 2)
-            @window.refresh
+          local_file = save_dir + File::SEPARATOR + self.item.executable_name + '.' + strip_file_extension(url_path)
 
-            #begin
+          File.open(local_file, 'w') { |f|
+            http.get(URI.escape(url_path)) do |str|
+              f.write str
+              @counter += str.length
+              @window.setpos(PROGRESSBAR_LOCATION_TOP, 1)
+              @window << (self.progress_bar.show(@counter)).center(WINDOW_WIDTH - 2)
+              @window.refresh
+
               char = @window.getch
-              http.finish if char == 'c'
-            #rescue
-              # ERR was returned because nothing has been typed
-            #end
-          end
-        }
+              http.finish if char == 'c' # cancel download
+            end
+          }
+
+        end
       end
     rescue IOError
       delete_cancelled_download(local_file)
