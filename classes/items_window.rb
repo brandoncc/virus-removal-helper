@@ -24,7 +24,7 @@ class ItemsWindow
         ['AVG Internet Security Edition', 'http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe', :direct],
         ['Avira Antivir', 'http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe', :direct]
     ].each do |i|
-      @items << Item.new(i[0], 'Antivirus Applications', i[1], i[2])
+      @items << Item.new(i[0], 'Antivirus Applications', i[1])
     end
 
     [
@@ -34,7 +34,7 @@ class ItemsWindow
         ['Norton Removal Tool', 'http://download.mcafee.com/products/licensed/cust_support_patches/MCPR.exe', :direct],
         ['Verizon Internet Security Suite Removal Tool', 'http://download.mcafee.com/products/licensed/cust_support_patches/MCPR.exe', :direct]
     ].each do |i|
-      @items << Item.new(i[0], 'Antivirus Removers', i[1], i[2])
+      @items << Item.new(i[0], 'Antivirus Removers', i[1])
     end
 
     ['ATF-Cleaner', 'Blastemp', 'CleanUp!'].each do |i|
