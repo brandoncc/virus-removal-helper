@@ -120,7 +120,7 @@ class ItemsWindow
   end
 
   def get_selected_item
-    @items.select{ |i| self.items(false)[@selected_line + @top_line_scrolled_to] == i.title }.first
+    @items.select { |i| self.items(false)[@selected_line + @top_line_scrolled_to] == i.title }.first
   end
 
 
