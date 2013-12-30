@@ -29,7 +29,13 @@ class Item
   end
 
   def get_download_link
+    url      = self.download_url[0]
+    selector = self.download_url[1]
 
+    agent = Mechanize.new
+    page = agent.get(url)
+
+    page.search(selector).first.to_s
   end
 
   def download_file(parent_window)
@@ -41,6 +47,6 @@ class Item
 
     download_window = DownloadWindow.new(self, parent_window)
     download_window.build_display
-    download_window.download_file(self.download_url)
+    download_window.download_file(url)
   end
 end
