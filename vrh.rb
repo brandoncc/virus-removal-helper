@@ -39,6 +39,12 @@ until (key = items_window.getch) == 'q'
     items_window.select_item
   when "\t".ord
     items_window.step_up_one_menu_level
+  when "\e".ord # easter egg, quick navigation
+    nav_key = items_window.getch
+
+    if ('a'..'z').include?(nav_key) || ('A'..'Z').include?(nav_key)
+      items_window.quick_navigate_to(nav_key)
+    end
   end
 end
 

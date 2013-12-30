@@ -142,4 +142,46 @@ class ItemsWindow
       build_display
     end
   end
+
+  def quick_navigate_to(character)
+    navigation_index = get_index_by_character(character)
+
+    unless navigation_index.nil?
+      set_selected_index_for_quick_navigation(navigation_index)
+    end
+
+    build_display
+  end
+
+  def set_selected_index_for_quick_navigation(index)
+    total_items_count = items(false).count
+    if total_items_count <= ITEM_LINES
+      @selected_line        = index
+      @top_line_scrolled_to = 0
+    else
+      if total_items_count - index <= ITEM_LINES
+        @top_line_scrolled_to = total_items_count - ITEM_LINES
+        @selected_line        = index - @top_line_scrolled_to
+      else
+        @top_line_scrolled_to = index
+        @selected_line        = 0
+      end
+    end
+  end
+
+  def get_index_by_character(character)
+    character = character.downcase
+
+    all_items        = self.items(false)
+    navigation_index = nil
+
+    all_items.each_with_index do |item, index|
+      if item[0].downcase >= character.downcase
+        navigation_index = index
+        break
+      end
+    end
+
+    navigation_index
+  end
 end
