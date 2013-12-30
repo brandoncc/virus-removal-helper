@@ -13,12 +13,11 @@ class ItemsWindow
     @selected_line        = 0
     @current_category     = :main
     @top_line_scrolled_to = 0
+    @items = []
     build_items
   end
 
   def build_items
-    @items = []
-
     [
         ['Avast Antivirus', 'http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe', :direct],
         ['AVG Free Edition', 'http://files.avast.com/iavs9x/avast_free_antivirus_setup.exe', :direct],
