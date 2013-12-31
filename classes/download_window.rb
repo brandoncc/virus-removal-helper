@@ -83,7 +83,17 @@ class DownloadWindow
   end
 
   def delete_cancelled_download(file)
+    file_dir = File.dirname(file)
     File.delete(file) if File.exists?(file)
+
+    begin
+      files_still_in_dir = Dir.entries(file_dir)
+      files_still_in_dir.delete('.')
+      files_still_in_dir.delete('..')
+      Dir.delete(file_dir) if files_still_in_dir.empty?
+    rescue SystemCallError
+      # directory doesn't exist
+    end
   end
 
   def build_display
