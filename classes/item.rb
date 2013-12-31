@@ -41,8 +41,10 @@ class Item
       url = self.download_url
     end
 
-    download_window = DownloadWindow.new(self, parent_window)
-    download_window.build_display
-    download_window.download_file(url)
+    unless url.nil?
+      download_window = DownloadWindow.new(self, parent_window)
+      download_window.build_display
+      download_window.download_file(url)
+    end
   end
 end
