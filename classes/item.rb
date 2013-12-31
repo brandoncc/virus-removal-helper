@@ -1,11 +1,10 @@
 class Item
-  attr_accessor :executable_name, :category, :title, :download_url
+  attr_accessor :category, :title, :download_url
 
   def initialize(title, category, download_url = nil)
     @title        = title
     self.category = category
-    set_executable_name(title)
-    @download_url  = download_url
+    @download_url = download_url
   end
 
   def category=(path)
@@ -14,10 +13,6 @@ class Item
 
   def category
     @category.join('|')
-  end
-
-  def set_executable_name(title)
-    self.executable_name = title.gsub(/[^A-Za-z0-9]/, '_').gsub(/_{2,}/, '_')
   end
 
   def normalized_category_folder
