@@ -75,7 +75,7 @@ class DownloadWindow
         end
       end
     rescue IOError
-      delete_cancelled_download(local_file)
+      delete_cancelled_download(local_file) # download was cancelled
     ensure
       @window.close
       @parent.build_display
