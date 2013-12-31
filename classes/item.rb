@@ -28,19 +28,20 @@ class Item
     mapped_branches.join(File::SEPARATOR)
   end
 
-  def get_download_link
-    url      = self.download_url[0]
-    selector = self.download_url[1]
+  def get_download_link(array)
+    url      = array.shift
 
-    agent = Mechanize.new
-    page = agent.get(url)
+    array.each do |selector|
+      doc = Nokogiri::HTML(open(url))
+      url = doc.search(selector).attr('href').value
+    end
 
-    page.search(selector).first.to_s
+    url
   end
 
   def download_file(parent_window)
     if @download_url.is_a?(Array)
-      url = get_download_link
+      url = get_download_link(self.download_url)
     else
       url = self.download_url
     end
