@@ -54,9 +54,13 @@ class ProgressBar
                                "#{size}B"
                              end
 
-    current_file_size_text = (' ' * (total_file_size_text.length - current_file_size_text.length)) + current_file_size_text
-
-    "#{current_file_size_text} / #{total_file_size_text}"
+    if total_file_size_text.length - current_file_size_text.length >= 0
+      current_file_size_text = (' ' * (total_file_size_text.length - current_file_size_text.length)) +
+          current_file_size_text
+      "#{current_file_size_text} / #{total_file_size_text}"
+    else
+      ''
+    end
   end
 
   def humanize_speed(c)
