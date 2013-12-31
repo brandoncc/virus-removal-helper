@@ -29,7 +29,7 @@ class DownloadWindow
     url_path = '/'+url.split('/')[3..-1].join('/')
     @counter = 0
 
-    save_dir = File.expand_path(File.dirname(__FILE__)) + File::SEPARATOR + self.item.normalized_category_folder
+    save_dir = File.expand_path(File.dirname(__FILE__)) + File::SEPARATOR + self.item.normalized_download_folder
 
     if !File::exist?(save_dir)
       FileUtils.makedirs(save_dir)
@@ -57,7 +57,7 @@ class DownloadWindow
 
           self.progress_bar = ProgressBar.new(response['content-length'].to_i, PROGRESSBAR_SIZE_WIDTH)
 
-          local_file = save_dir + File::SEPARATOR + self.item.executable_name + '.' + strip_file_extension(url_path)
+          local_file = save_dir + File::SEPARATOR + strip_file_name(url_path)
 
           File.open(local_file, 'w') { |f|
             http.get(URI.escape(url_path)) do |str|

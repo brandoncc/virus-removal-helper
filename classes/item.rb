@@ -15,12 +15,16 @@ class Item
     @category.join('|')
   end
 
-  def normalized_category_folder
+  def normalized_download_folder
     mapped_branches = self.category.split('|').map do |branch|
-      branch.gsub(/[^A-Za-z0-9]/, '_').gsub(/_{2,}/, '_')
+      normalize_text(branch)
     end
 
-    mapped_branches.join(File::SEPARATOR)
+    [mapped_branches, normalize_text(self.title)].flatten.join(File::SEPARATOR)
+  end
+
+  def normalize_text(t)
+    t.gsub(/[^A-Za-z0-9]/, '_').gsub(/_{2,}/, '_')
   end
 
   def get_download_link(array)
